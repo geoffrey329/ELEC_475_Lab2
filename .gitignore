@@ -20,3 +20,6 @@ ELEC475_*.pdf
 .idea/
 .DS_Store
 Thumbs.db
+
+#Personal Notes
+gitcommands.md
