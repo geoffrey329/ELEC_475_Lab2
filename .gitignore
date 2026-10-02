@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Datasets (auto-downloaded, ~800 MB) - never commit
+data/
+
+# Model weights (large; included in the OnQ .zip instead)
+checkpoints/
+*.pth
+
+# Course handouts
+ELEC475_*.pdf
+!ELEC475_Lab2_Report.pdf
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
