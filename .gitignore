@@ -23,3 +23,5 @@ Thumbs.db
 
 #Personal Notes
 gitcommands.md
+# Downloaded archives (Drive exports, submission zips)
+*.zip
