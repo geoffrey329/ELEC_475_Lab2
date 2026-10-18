@@ -83,6 +83,29 @@ class AlexNet64(nn.Module):
         # ======================================================================
         self.features = nn.Sequential(
             # Replace with your 5-stage convolutional architecture
+            #step1
+            nn.Conv2d(in_channels, 64, kernel_size=5, stride=2, padding=2),
+            get_norm_layer(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            #step2
+            nn.Conv2d(64,192,kernel_size=5,stride=1,padding=2),
+            get_norm_layer(192),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2),
+            #step3
+            nn.Conv2d(192,384,kernel_size=3,stride=1,padding=1),
+            nn.BatchNorm2d(384) if self.norm_type == 'bn' else nn.Identity(),
+            nn.ReLU(inplace=True),
+            #step4
+            nn.Conv2d(384, 384, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(384) if self.norm_type == 'bn' else nn.Identity(),
+            nn.ReLU(inplace=True),
+            #step5
+            nn.Conv2d(384, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256) if self.norm_type == 'bn' else nn.Identity(),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2)
         )
 
         # ======================================================================
@@ -99,6 +122,13 @@ class AlexNet64(nn.Module):
         # ======================================================================
         self.classifier = nn.Sequential(
             # Replace with your dropout-regularized dense classifier
+            nn.Dropout(p=0.5),
+            nn.Linear(in_features=256 * 3 * 3, out_features=1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=0.5),
+            nn.Linear(in_features=1024, out_features=1024),
+            nn.ReLU(inplace=True),
+            nn.Linear(in_features=1024, out_features=num_classes)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -109,7 +139,11 @@ class AlexNet64(nn.Module):
         # 3. Pass flattened vector through self.classifier: logits = self.classifier(x)
         # 4. Return logits
         # ======================================================================
-        pass
+        # flattens out from convoltuion into the classifier???
+        x = self.features(x)               
+        x = torch.flatten(x, start_dim=1)  
+        logits = self.classifier(x)        
+        return logits
 
 if __name__ == "__main__":
     from torchinfo import summary
