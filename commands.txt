@@ -44,9 +44,18 @@ python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15 --seed 4
 python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15 --seed 42 --save-model checkpoints/alexnet_with_aug.pth --plot-file plots/loss_with_aug.png
 
 
---- Post-Lab Step 4: Tiny ImageNet-200 (10 epochs, augmentation on) -----------
+--- Post-Lab Step 4: Tiny ImageNet-200 ----------------------------------------
 
-python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 10 --seed 42 --save-model checkpoints/alexnet_tiny_imagenet.pth --plot-file plots/loss_tiny_imagenet.png
+# Step 4 run: AlexNet + BN with augmentation (PDF default augmentation; run for 15 epochs)
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 15 --seed 42 --save-model checkpoints/alexnet_tiny_imagenet.pth --plot-file plots/loss_tiny_imagenet.png
+
+# Table 7.3b Tiny ImageNet columns: remaining models, same settings as their CIFAR-10 rows
+python train.py --model lenet --dataset tiny_imagenet --epochs 5 --seed 42 --no-augment --save-model checkpoints/lenet_tiny.pth --plot-file plots/loss_lenet_tiny.png
+python train.py --model lenet_modern --dataset tiny_imagenet --epochs 5 --seed 42 --no-augment --save-model checkpoints/lenet_modern_tiny.pth --plot-file plots/loss_lenet_modern_tiny.png
+python train.py --model alexnet --norm none --dataset tiny_imagenet --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_none_tiny.pth --plot-file plots/loss_alexnet_none_tiny.png
+python train.py --model alexnet --norm lrn --dataset tiny_imagenet --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_lrn_tiny.pth --plot-file plots/loss_alexnet_lrn_tiny.png
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_bn_tiny.pth --plot-file plots/loss_alexnet_bn_tiny.png
+python train.py --model zoo_alexnet --dataset tiny_imagenet --epochs 10 --seed 42 --no-augment --save-model checkpoints/zoo_alexnet_tiny.pth --plot-file plots/loss_zoo_alexnet_tiny.png
 
 
 --- Post-Lab Step 5: Benchmarking, zoo baseline, multi-seed -------------------
