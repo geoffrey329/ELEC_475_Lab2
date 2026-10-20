@@ -70,3 +70,9 @@ python train.py --model zoo_alexnet --dataset cifar10 --epochs 10 --seed 42 --no
 # Multi-seed AlexNet + BatchNorm (seed 42 is the Step 2 run above)
 python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --seed 43 --no-augment --save-model checkpoints/alexnet_bn_s43.pth --plot-file plots/loss_alexnet_bn_s43.png
 python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --seed 44 --no-augment --save-model checkpoints/alexnet_bn_s44.pth --plot-file plots/loss_alexnet_bn_s44.png
+
+# Master ablation summary plot (reads the logs above). The manual's
+# "python -m utils.visualization --plot-ablation" has no CLI entry point, so a
+# small script calls the provided plot_ablation_summary() instead.
+python plot_ablation.py                          # -> plots/ablation_summary.png
+python plot_ablation.py --dataset tiny_imagenet  # -> plots/ablation_summary_tiny.png
