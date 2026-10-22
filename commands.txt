@@ -1,11 +1,13 @@
 ELEC 475 - Lab 2: Terminal Commands
 ====================================
-Run from the lab2 project folder with the virtual environment active:
+Run every command from a terminal in the lab2 project folder with the virtual environment active:
     .\.venv\Scripts\Activate.ps1          (Windows PowerShell)
+    .\.venv\Scripts\activate.bat          (Windows Command Prompt)
     source .venv/bin/activate             (macOS / Linux)
 
 Datasets download automatically into ./data on first use.
-All training runs below were executed on a Tesla T4 GPU (Google Colab).
+train.py uses a CUDA GPU automatically when one is available, otherwise the CPU.
+Reported results were produced on an NVIDIA Tesla T4; the commands are identical on any PC.
 
 
 --- Pre-Lab -------------------------------------------------------------------
@@ -60,9 +62,13 @@ python train.py --model zoo_alexnet --dataset tiny_imagenet --epochs 10 --seed 4
 
 --- Post-Lab Step 5: Benchmarking, zoo baseline, multi-seed -------------------
 
-# Complexity table (Params / MACs / FLOPs / latency). Runs on CPU: the provided
-# profiler fails when a GPU is visible, so the GPU is hidden for this command.
-CUDA_VISIBLE_DEVICES="" python compare_models.py --dataset cifar10
+# Complexity table (Params / MACs / FLOPs / latency).
+# On a PC without a CUDA GPU, run it directly:
+python compare_models.py --dataset cifar10
+# On a PC WITH a CUDA GPU the provided profiler fails (model on CPU, input on GPU),
+# so hide the GPU for this one command:
+#   Windows PowerShell:   $env:CUDA_VISIBLE_DEVICES="-1"; python compare_models.py --dataset cifar10; Remove-Item Env:CUDA_VISIBLE_DEVICES
+#   macOS / Linux:        CUDA_VISIBLE_DEVICES=-1 python compare_models.py --dataset cifar10
 
 # PyTorch Model Zoo AlexNet baseline
 python train.py --model zoo_alexnet --dataset cifar10 --epochs 10 --seed 42 --no-augment --save-model checkpoints/zoo_alexnet.pth --plot-file plots/loss_zoo_alexnet.png
@@ -76,3 +82,18 @@ python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --seed 4
 # small script calls the provided plot_ablation_summary() instead.
 python plot_ablation.py                          # -> plots/ablation_summary.png
 python plot_ablation.py --dataset tiny_imagenet  # -> plots/ablation_summary_tiny.png
+
+
+--- Post-Lab Step 5: Extended ablation (AlexNet-64 + BN, CIFAR-10, 10 ep) ------
+# Baseline = the Step 2 BatchNorm run (alexnet --norm bn, seed 42).
+# Each variant changes exactly ONE thing (see models/alexnet_ablation.py).
+
+python -m models.alexnet_ablation    # prints params / output shape of every variant
+
+python train.py --model alexnet_no_dropout --dataset cifar10 --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_no_dropout.pth --plot-file plots/loss_alexnet_no_dropout.png
+python train.py --model alexnet_half_width --dataset cifar10 --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_half_width.pth --plot-file plots/loss_alexnet_half_width.png
+python train.py --model alexnet_shallow --dataset cifar10 --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_shallow.pth --plot-file plots/loss_alexnet_shallow.png
+python train.py --model alexnet_avgpool --dataset cifar10 --epochs 10 --seed 42 --no-augment --save-model checkpoints/alexnet_avgpool.pth --plot-file plots/loss_alexnet_avgpool.png
+
+# Optimizer ablation: learning rate 1e-3 -> 1e-4 on the unchanged baseline model
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --seed 42 --no-augment --lr 0.0001 --save-model checkpoints/alexnet_bn_lr1e-4.pth --plot-file plots/loss_alexnet_bn_lr1e-4.png
