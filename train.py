@@ -76,8 +76,10 @@ def evaluate(model, loader, criterion, device, num_classes=10):
 def main():
     parser = argparse.ArgumentParser(description="ELEC 475: Lab 2 Model Trainer")
     parser.add_argument("--model", type=str, default="lenet",
-                        choices=["lenet", "lenet_modern", "alexnet", "zoo_alexnet"],
-                        help="Model architecture: 'lenet', 'lenet_modern', 'alexnet', 'zoo_alexnet'")
+                        choices=["lenet", "lenet_modern", "alexnet", "zoo_alexnet",
+                                 "alexnet_no_dropout", "alexnet_half_width", "alexnet_shallow", "alexnet_avgpool"],
+                        help="Model architecture: 'lenet', 'lenet_modern', 'alexnet', 'zoo_alexnet', "
+                             "or an AlexNet+BN ablation variant 'alexnet_<no_dropout|half_width|shallow|avgpool>'")
     parser.add_argument("--norm", type=str, default="bn", choices=["none", "lrn", "bn"],
                         help="Normalization for AlexNet: 'none', 'lrn', 'bn'")
     parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights for Model Zoo architectures")
