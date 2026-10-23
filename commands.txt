@@ -1,14 +1,4 @@
 ELEC 475 - Lab 2: Terminal Commands
-====================================
-Run every command from a terminal in the lab2 project folder with the virtual environment active:
-    .\.venv\Scripts\Activate.ps1          (Windows PowerShell)
-    .\.venv\Scripts\activate.bat          (Windows Command Prompt)
-    source .venv/bin/activate             (macOS / Linux)
-
-Datasets download automatically into ./data on first use.
-train.py uses a CUDA GPU automatically when one is available, otherwise the CPU.
-Reported results were produced on an NVIDIA Tesla T4; the commands are identical on any PC.
-
 
 --- Pre-Lab -------------------------------------------------------------------
 
